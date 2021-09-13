@@ -42,7 +42,7 @@ class MyApp extends App<IProps> {
     return (
       <React.Fragment>
         <Head>
-          <title>GraphQL Job Board</title>
+          <title>Find persons by name</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         {/* adds the apollo provider to provide it's children with the apollo scope. */}
