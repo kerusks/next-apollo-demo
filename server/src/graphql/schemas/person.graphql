@@ -1,0 +1,21 @@
+ type Query {
+    persons(personCount: Int!): [Person]
+}
+
+type Person {
+    fullname: String!
+    address: Address
+    email: String!
+    phone: String!
+}
+
+type Address {
+        street: String!
+        address: String!
+        address1: String!
+        address2: String!
+        state: String!
+        city: String!
+        country: String!
+}
+
