@@ -8,8 +8,7 @@ import cors from 'cors';
 
 const startApolloServer = async (schema: GraphQLSchema) => {
   const port = process.env.PORT || 5000
-  const app = express();  
-  app.set('port', port)
+  const app = express();
   const httpServer = http.createServer(app);
   const server = new ApolloServer({
     schema,
@@ -17,7 +16,7 @@ const startApolloServer = async (schema: GraphQLSchema) => {
   });
   await server.start();
   server.applyMiddleware({ app });
-  await new Promise(resolve => httpServer.listen(resolve));
+  await new Promise(resolve => httpServer.listen({ port }, resolve));
   console.log(`Graphql Server started on: http://localhost:${port}${server.graphqlPath}`)
 }
 

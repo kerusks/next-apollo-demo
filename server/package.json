@@ -1,11 +1,16 @@
 {
-  "name": "faker-graphql",
+  "name": "server2",
   "version": "1.0.0",
-  "license": "MIT",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon src/server.ts",
+    "start": "nodemon src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "codegen": "graphql-codegen --config codegen.yml"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@graphql-tools/utils": "^8.2.2",
     "apollo-server": "^3.3.0",
