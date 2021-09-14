@@ -3,7 +3,11 @@ import App from "next/app";
 import Head from "next/head";
 import { ApolloProvider } from "@apollo/react-hooks";
 import withApollo from "../lib/withApollo";
-import { ApolloClient, NormalizedCacheObject } from "apollo-boost";
+import {
+  ApolloClient,
+  InMemoryCache,
+  NormalizedCacheObject,
+} from '@apollo/client'
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 

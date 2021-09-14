@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ListPersons from "../components/ListPersons";
+import TypeAhead from "../components/Typeahead";
 import { useQuery } from "@apollo/react-hooks";
-import TypeAhead from "../components/TypeAhead";
 import { PersonsData, Person } from "../models/person";
 import { GET_PERSONS } from "../gql/person";
 
@@ -10,7 +10,6 @@ interface PersonCountVars {
 }
 
 const Index = () => {
-  // the hook that calls the query.
   const { loading, error, data } = useQuery<PersonsData, PersonCountVars>(
     GET_PERSONS,
     { variables: { personCount: 2000 } }
