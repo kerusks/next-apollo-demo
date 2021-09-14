@@ -1,77 +1,46 @@
-import React, {useEffect, useState} from "react"
-import ListPersons from "../components/ListPersons"
-import { useQuery } from "@apollo/react-hooks"
-import { gql } from "apollo-boost"
-import Typeahead from "../components/Typeahead"
-export interface Address {
-  address: string;
-}
-
-export interface Person {
-  fullname: string;
-  email: string;
-  phone: string;
-  address: Address;
-}
-
-export interface PersonsData {
-  persons: Person[];
-}
-
+import React, { useEffect, useState } from "react";
+import ListPersons from "../components/ListPersons";
+import { useQuery } from "@apollo/react-hooks";
+import TypeAhead from "../components/TypeAhead";
+import { PersonsData, Person } from "../models/person";
+import { GET_PERSONS } from "../gql/person";
 
 interface PersonCountVars {
   personCount: number;
 }
 
 const Index = () => {
-  const GET_PERSONS = gql`
-  query Query($personCount: Int!) {
-    persons(personCount: $personCount) {
-      fullname
-      email
-      phone
-      address {
-        address
-      }
-    }
-  }
-`
-
   // the hook that calls the query.
-  const {loading, error, data}  = useQuery<PersonsData, PersonCountVars>(GET_PERSONS, {variables: {personCount: 81}})
+  const { loading, error, data } = useQuery<PersonsData, PersonCountVars>(
+    GET_PERSONS,
+    { variables: { personCount: 2000 } }
+  );
 
-  const updatedPersonsList = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const term:string = event.target.value.replace(/\s+/g, ' ').trim()
-    if (term.length > 2) {
-      console.log ('personsData', data);
+  const [foundPersons, setFoundPersons] = useState<Person[]>([]);
 
-        const filterPersons:Person[]  = data?.persons.filter((p:Person) => p.fullname.toLowerCase().includes(term.toLowerCase()));
-        setFoundPersons(filterPersons)
-        console.log('is Array', filterPersons);
-    }else{
-        setFoundPersons(data!.persons)
+  useEffect(() => {
+    if (loading === false && data) {
+      setFoundPersons(data.persons);
     }
-  }
- 
-  const [foundPersons, setFoundPersons] = useState <Person[]>([]);
- 
-  useEffect(()=>{
-    if (loading===false && data) {
-      setFoundPersons(data.persons)
-    }
-  },[loading, data])
-
-  if (loading) return `<p>Loading...</p>`;
-  if (error) return `Error! ${error}`;
+  }, [loading, data]);
 
   return (
-    <div>
-      {<Typeahead filter={updatedPersonsList}/>}
-      <div>{loading}</div>
-      <div>{error}</div>
-      {foundPersons && <ListPersons persons={foundPersons} paging={20} />}
-    </div>
-  )
-}
+    <>
+      {
+        <TypeAhead
+          data={data?.persons ?? []}
+          filter={(d: Person[]) => setFoundPersons(d)}
+        />
+      }
 
-export default Index
+      {loading && <div>Loading...</div>}
+      {error && <div>{error}</div>}
+
+      {loading === false && !error && foundPersons && (
+        <ListPersons persons={foundPersons} paging={20} />
+      )}
+    </>
+  );
+};
+
+export default Index;

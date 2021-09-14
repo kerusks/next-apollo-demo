@@ -1,12 +1,12 @@
-import { printIntrospectionSchema } from "graphql";
-import React, {ChangeEvent, SyntheticEvent, useState} from "react";
+import React from "react";
 import {NextPage} from 'next';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import { Person } from "../models/person";
 
-
-interface TypeaheadProps {
-  filter: (event: React.ChangeEvent<HTMLInputElement>) => void
+export interface TypeAheadProps {
+  filter: (persons: Person[]) => void;
+  data: Person[];
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -18,19 +18,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Typeahead: NextPage<TypeaheadProps> = ({filter }) => {
+const TypeAhead
+: NextPage<TypeAheadProps> = ({filter, data }) => {
   const classes = useStyles();
+
+  // Could do with debounce - only if time allows
+  const updatedPersonsList = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!data) return;
+    const term: string = event.target.value.replace(/\s+/g, " ").trim();
+    if (term.length > 2) {
+      const filterPersons: Person[] | undefined = data.filter(
+        (p: Person) => p.fullname.toLowerCase().includes(term.toLowerCase())
+      );
+      filter(filterPersons ?? []);
+    } else {
+      filter(data);
+    }
+  };
+  
   return(
-    <form className={classes.root} noValidate autoComplete="off">
+    
     <TextField
-          onChange={filter}
+          onChange={updatedPersonsList}
           placeholder="At least 3 chars"
           id="outlined-basic"
-          label="Search persons by name"
+          label="Search by name"
           variant="outlined"
         />
-    </form>
+    
   )
 }
 
-export default Typeahead;
+export default TypeAhead
+;

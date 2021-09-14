@@ -1,32 +1,11 @@
-import React from "react"
-import App from "next/app"
-import Head from "next/head"
-import { ThemeProvider, createGlobalStyle } from "styled-components"
-import { ApolloProvider } from "@apollo/react-hooks"
-import withApollo from "../lib/withApollo"
-import { ApolloClient, NormalizedCacheObject } from "apollo-boost"
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-
-export interface ITheme {
-  niceBlack: string;
-}
-
-export interface IThemeWrapper {
-  theme: ITheme;
-}
-
-export const theme: ITheme = {
-  niceBlack: "#001F3F",
-}
-
-const GlobalStyle = createGlobalStyle<IThemeWrapper>`
-  body {
-    margin: 0 auto;
-    color: ${props => props.theme.niceBlack}; 
-  }
-`
+import React from "react";
+import App from "next/app";
+import Head from "next/head";
+import { ApolloProvider } from "@apollo/react-hooks";
+import withApollo from "../lib/withApollo";
+import { ApolloClient, NormalizedCacheObject } from "apollo-boost";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Container from "@material-ui/core/Container";
 
 // since "apollo" isn't a native Next.js prop we have to declare it's type.
 interface IProps {
@@ -36,8 +15,8 @@ interface IProps {
 // adds our custom props interface to the generic App base class.
 class MyApp extends App<IProps> {
   render() {
-    // instead of creating a client here, we use the rehydrated apollo client provided by our own withApollo provider. 
-    const { Component, pageProps, apollo } = this.props
+    // instead of creating a client here, we use the rehydrated apollo client provided by our own withApollo provider.
+    const { Component, pageProps, apollo } = this.props;
 
     return (
       <React.Fragment>
@@ -47,18 +26,15 @@ class MyApp extends App<IProps> {
         </Head>
         {/* adds the apollo provider to provide it's children with the apollo scope. */}
         <ApolloProvider client={apollo}>
-          <ThemeProvider theme={theme}>
-          <CssBaseline />     
+          <CssBaseline />
           <Container maxWidth="lg">
-            <GlobalStyle />
             <Component {...pageProps} />
-            </Container>       
-          </ThemeProvider>
+          </Container>
         </ApolloProvider>
       </React.Fragment>
-    )
+    );
   }
 }
 
 // before exporting our App we wrapp it with our own withApollo provider to have access to the our rehydrated apollo client.
-export default withApollo(MyApp)
+export default withApollo(MyApp);
